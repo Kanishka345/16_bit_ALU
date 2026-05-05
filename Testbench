@@ -29,7 +29,7 @@ initial begin
     opcode = 4'b1001; #10;//rotate right
     A = 16'h000F;opcode = 4'b1010; #10;//inc
     A = 16'h000F;opcode = 4'b1011; #10;//dec
-    //a right shift
+    //airth right shift
     A = 16'hF000;opcode = 4'b1100;#10;
     A = 16'd5; B = 16'd5; opcode = 4'b0001; #10;
     A = 16'h7FFF; B = 16'd1; opcode = 4'b0000; #10;
