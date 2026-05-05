@@ -1,0 +1,41 @@
+`timescale 1ns/1ps
+module alu_tb;
+
+reg [15:0] A, B;
+reg [3:0] opcode;
+wire [15:0] result;
+wire Z, N, C, V;
+
+alu_16bit uut (.A(A), .B(B), .opcode(opcode), .result(result),.Z(Z), .N(N), .C(C), .V(V));
+
+initial begin
+
+    $dumpfile("alu.vcd");
+    $dumpvars(0, alu_tb);
+
+    A = 16'd10; B = 16'd5; opcode = 4'b0000; #10;//add
+
+    A = 16'd10; B = 16'd20; opcode = 4'b0001; #10;//sub
+
+    // And
+    A = 16'hF0F0; B = 16'h0FF0;
+    opcode = 4'b0010; #10;//and
+    opcode = 4'b0011; #10;//or
+    opcode = 4'b0100; #10;//xor
+    A = 16'hAAAA; opcode = 4'b0101; #10;//not
+    A = 16'h0001; opcode = 4'b0110; #10;//left shift
+    A = 16'h0002; opcode = 4'b0111; #10;//right shift
+    A = 16'h8001; opcode = 4'b1000; #10;//rotate left
+    opcode = 4'b1001; #10;//rotate right
+    A = 16'h000F;opcode = 4'b1010; #10;//inc
+    A = 16'h000F;opcode = 4'b1011; #10;//dec
+    //a right shift
+    A = 16'hF000;opcode = 4'b1100;#10;
+    A = 16'd5; B = 16'd5; opcode = 4'b0001; #10;
+    A = 16'h7FFF; B = 16'd1; opcode = 4'b0000; #10;
+
+    $finish;
+
+end
+
+endmodule
