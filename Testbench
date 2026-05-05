@@ -33,7 +33,8 @@ initial begin
     A = 16'hF000;opcode = 4'b1100;#10;
     A = 16'd5; B = 16'd5; opcode = 4'b0001; #10;
     A = 16'h7FFF; B = 16'd1; opcode = 4'b0000; #10;
-
+    $display("FINAL OUTPUT -> Time=%0t | Opcode=%b | A=%h | B=%h | Result=%h | Flags(Z N C V)=%b %b %b %b",
+              $time, opcode, A, B, result, Z, N, C, V);
     $finish;
 
 end
