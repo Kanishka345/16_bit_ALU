@@ -1,0 +1,70 @@
+`timescale 1ns/1ps
+module alu_16bit (
+    input [15:0] A, B,
+    input [3:0] opcode,
+    output reg [15:0] result,
+    output reg Z, N, C, V
+);
+
+reg [16:0] temp;
+
+always @(*) begin
+    C = 0; V = 0;
+
+    case(opcode)
+
+    4'b0000: begin // add
+        temp = A + B;
+        result = temp[15:0];
+        C = temp[16];
+        V = (A[15] == B[15]) && (result[15] != A[15]);
+    end
+    4'b0001: begin // Sub
+        temp = A - B;
+        result = temp[15:0];
+        C = temp[16];
+        V = (A[15] != B[15]) && (result[15] != A[15]);
+    end
+    4'b0010: result = A & B; //and
+    4'b0011: result = A | B;
+    4'b0100: result = A ^ B;
+    4'b0101: result = ~A;
+    4'b0110: begin // left shift
+        result = A << 1;
+        C = A[15];
+    end
+    4'b0111: begin // right shift
+        result = A >> 1;
+        C = A[0];
+    end
+    4'b1000: begin // rotate left
+        result = {A[14:0], A[15]};
+    end
+    4'b1001: begin // rotate right
+        result = {A[0], A[15:1]};
+    end
+    4'b1010: begin // increment
+        temp = A + 1;
+        result = temp[15:0];
+        C = temp[16];
+        V = (A==16'h7FFF);
+    end
+    4'b1011: begin // decrement
+        temp = A - 1;
+        result = temp[15:0];
+        C = temp[16];
+        V = (A==16'h8000);
+    end
+    4'b1100:begin
+    result = $signed(A)>>>1;
+    C = A[0];
+    end
+    default: result = 16'b0;
+
+    endcase
+    // Flags
+    Z = (result == 0);
+    N = result[15];
+end
+endmodule
+
